@@ -6,6 +6,7 @@ const cors = require("cors");
 let http = require('http').createServer(app);
 let io = require('socket.io')(http);
 
+
 const dbConnection = require('./dbConnection');
 const projectRouter = require('./routers/projectRouter');
 
@@ -29,7 +30,7 @@ app.use((req, res, next) => {
 // Use the router
 app.use('/api/project', projectRouter);
 
-app.listen(port, () => {
+http.listen(port, () => { 
     console.log(`App running at http://localhost:${port}`);
 });
 
@@ -43,13 +44,12 @@ app.get('/addTwoNumbers/:firstNumber/:secondNumber', function(req,res,next){
     else { res.json({result: result, statusCode: 200}).status(200) }
     })
 
-    //socket test
 io.on('connection', (socket) => {
     console.log('a user connected');
     socket.on('disconnect', () => {
     console.log('user disconnected');
     });
     setInterval(()=>{
-    socket.emit('number', parseInt(Math.random()*10));
+        socket.emit('number', parseInt(Math.random()*10));
     }, 1000);
     });
